@@ -1169,59 +1169,10 @@
             });
         });
 
-        // --- FUNCIONAMIENTO DEL FORMULARIO ---
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        
             
-            // Obtener datos del formulario
-            const nombre = document.getElementById('nombre').value;
-            const email = document.getElementById('email').value;
-            const telefono = document.getElementById('telefono').value;
-            const mensaje = document.getElementById('mensaje').value;
 
-            // --- OPCIÓN 1: Enviar por WhatsApp (Recomendado) ---
-            // Construir el mensaje para WhatsApp
-            const textoWhatsApp = `Hola ProyectTec,%0A%0A*Nombre:* ${nombre}%0A*Teléfono:* ${telefono}%0A*Correo:* ${email}%0A%0A*Mensaje:* ${mensaje}`;
-            const urlWhatsApp = `https://wa.me/5356220351?text=${textoWhatsApp}`;
-            
-            // Abrir WhatsApp en una nueva pestaña
-            window.open(urlWhatsApp, '_blank');
-            
-            // Mostrar feedback
-            const feedback = document.getElementById('formFeedback');
-            feedback.style.display = 'block';
-            feedback.innerHTML = `
-                <div class="alert alert-success">
-                    <i class="fas fa-check-circle"></i> 
-                    Mensaje enviado por WhatsApp. Te contactaremos pronto.
-                </div>
-            `;
-            
-            // Limpiar el formulario (opcional)
-            // this.reset();
-
-            /* --- OPCIÓN 2: Enviar por correo (requiere backend) ---
-            // Si quieres usar correo, descomenta esto y comenta lo de WhatsApp
-            // Envía los datos a un servidor o servicio como Formspree
-            fetch('https://formspree.io/f/tu-id-aqui', {
-                method: 'POST',
-                body: new FormData(this),
-                headers: { 'Accept': 'application/json' }
-            })
-            .then(response => {
-                if (response.ok) {
-                    document.getElementById('formFeedback').style.display = 'block';
-                    this.reset();
-                }
-            })
-            .catch(error => console.error('Error:', error));
-            */
-        });
-
-        // Efecto de carga
-        window.addEventListener('load', function() {
-            document.body.classList.add('loaded');
-        });
+        
     </script>
 </body>
 </html>
