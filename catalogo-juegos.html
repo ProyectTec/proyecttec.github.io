@@ -1,0 +1,1424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Catálogo de Juegos · PROYECTTEC</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"/>
+    <style>
+        :root {
+            --primary-blue: #0a6bff;
+            --dark-bg: #0a0a0f;
+            --card-bg: #12121a;
+            --text-light: #e8e8f0;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 50vh;
+            display:flex;
+            align-items:center;
+            background: linear-gradient(135deg, #0a0a0f 0%, #0d1b2a 100%);
+            padding:60px 0 40px;
+            position:relative;
+        }
+        .hero::after {
+            content:'';
+            position:absolute; top:0; right:0; width:40%; height:100%;
+            background: radial-gradient(ellipse at center right, rgba(10,107,255,0.1) 0%, transparent 70%);
+            pointer-events:none;
+        }
+        .hero h1 {
+            font-size:3.2rem; font-weight:800;
+            background: linear-gradient(135deg, #fff 0%, #0a6bff 100%);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+        }
+        .hero-subtitle { color:#a0b4d0; font-size:1.2rem; }
+
+        .btn-primary-custom {
+            background: linear-gradient(135deg, #0a6bff, #0050d0);
+            border:none; padding:12px 32px; font-weight:600; border-radius:50px;
+            color:#fff; transition:all .3s; box-shadow:0 0 20px rgba(10,107,255,0.3);
+            text-decoration:none; display:inline-block;
+        }
+        .btn-primary-custom:hover { transform:translateY(-3px); box-shadow:0 0 30px rgba(10,107,255,0.5); color:#fff; }
+        .btn-outline-custom {
+            border:2px solid var(--primary-blue); padding:12px 32px; font-weight:600;
+            border-radius:50px; color:var(--primary-blue); background:transparent;
+            transition:all .3s; text-decoration:none; display:inline-block;
+        }
+        .btn-outline-custom:hover { background:var(--primary-blue); color:#fff; transform:translateY(-3px); }
+
+        .section-title {
+            font-size:2.5rem; font-weight:700;
+            background: linear-gradient(135deg, #ffffff, #0a6bff);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+        }
+        .section-subtitle { color:#a0b4d0; font-size:1.1rem; }
+
+        /* ===== BUSCADOR ===== */
+        .search-wrapper {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+        .search-wrapper input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border-radius: 50px;
+            border: 2px solid rgba(10,107,255,0.15);
+            background: var(--card-bg);
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        .search-wrapper input::placeholder {
+            color: #6a7a90;
+        }
+        .search-wrapper input:focus {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 30px rgba(10,107,255,0.1);
+        }
+        .search-wrapper .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6a7a90;
+            font-size: 1.1rem;
+            pointer-events: none;
+        }
+        .search-wrapper .clear-search {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6a7a90;
+            cursor: pointer;
+            font-size: 1rem;
+            display: none;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .search-wrapper .clear-search:hover {
+            color: #fff;
+        }
+        .search-wrapper .clear-search.visible {
+            display: block;
+        }
+
+        /* TARJETA DE JUEGO */
+        .game-card {
+            background: var(--card-bg);
+            border:1px solid rgba(10,107,255,0.1);
+            border-radius:20px;
+            overflow:hidden;
+            transition: all 0.4s ease;
+            height:100%;
+            display:flex;
+            flex-direction:column;
+        }
+        .game-card:hover {
+            transform:translateY(-8px);
+            border-color:var(--primary-blue);
+            box-shadow:0 10px 40px rgba(10,107,255,0.15);
+        }
+        .game-card .cover {
+            width:100%;
+            height:350px;
+            object-fit:cover;
+            background:#1a1a2e;
+            border-bottom:1px solid rgba(10,107,255,0.1);
+        }
+        .game-card .card-body {
+            padding:1.2rem 1.2rem 1.5rem;
+            flex:1;
+            display:flex;
+            flex-direction:column;
+        }
+        .game-card h4 {
+            font-weight:700; font-size:1.15rem; color:#fff;
+            margin-bottom:0.3rem;
+            line-height:1.3;
+        }
+        .game-card .game-size {
+            color:#a0b4d0; font-size:0.85rem;
+            background:rgba(10,107,255,0.1);
+            padding:0.15rem 1rem; border-radius:20px;
+            display:inline-block; margin:0.3rem 0 0.5rem;
+        }
+        .game-card .game-desc {
+            color:#b0c4e0; font-size:0.9rem;
+            flex:1;
+            margin-bottom:0.5rem;
+        }
+        .game-card .game-price {
+            color:var(--primary-blue); font-weight:700; font-size:1.4rem;
+            margin:0.5rem 0 0.3rem;
+        }
+        .game-card .btn-sm-custom {
+            background:linear-gradient(135deg, #0a6bff, #0050d0);
+            border:none; color:#fff; padding:8px 20px; border-radius:30px;
+            font-weight:600; transition:all .3s; text-decoration:none;
+            display:inline-block; font-size:0.9rem;
+            text-align:center; align-self:flex-start;
+        }
+        .game-card .btn-sm-custom:hover {
+            transform:scale(1.05); box-shadow:0 0 20px rgba(10,107,255,0.4); color:#fff;
+        }
+
+        .filter-btn {
+            background:transparent;
+            border:1px solid rgba(10,107,255,0.2);
+            color:#a0b4d0;
+            padding:6px 18px;
+            border-radius:30px;
+            font-size:0.9rem;
+            transition:all .3s;
+            cursor:pointer;
+            margin:0 4px 8px 0;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background:var(--primary-blue);
+            color:#fff;
+            border-color:var(--primary-blue);
+        }
+
+        .whatsapp-float {
+            position:fixed; bottom:30px; right:30px;
+            background:#25D366; color:#fff;
+            width:60px; height:60px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center;
+            font-size:2rem; box-shadow:0 4px 20px rgba(37,211,102,0.4);
+            z-index:999; transition:all .3s; text-decoration:none;
+        }
+        .whatsapp-float:hover { transform:scale(1.1); color:#fff; box-shadow:0 4px 30px rgba(37,211,102,0.6); }
+
+        footer {
+            background:#050508; padding:30px 0;
+            border-top:1px solid rgba(10,107,255,0.1);
+        }
+        .footer-contact-item { color:#a0b4d0; text-decoration:none; transition:color .3s; }
+        .footer-contact-item:hover { color:#0a6bff; }
+        .footer-contact-item i { color:var(--primary-blue); margin-right:8px; }
+
+        .cover-placeholder {
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            background:linear-gradient(135deg, #0d1b2a, #1a1a3e);
+            color:rgba(10,107,255,0.2);
+            font-size:3rem;
+            height:200px;
+            width:100%;
+            border-bottom:1px solid rgba(10,107,255,0.1);
+        }
+
+        .btn-add-game {
+            background: rgba(10,107,255,0.1);
+            border: 2px dashed rgba(10,107,255,0.3);
+            color: #a0b4d0;
+            padding: 40px 20px;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 380px;
+        }
+        .btn-add-game:hover {
+            border-color: var(--primary-blue);
+            background: rgba(10,107,255,0.05);
+            color: #fff;
+        }
+        .btn-add-game i {
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        /* resaltado de coincidencia */
+        .highlight-match {
+            background: rgba(10,107,255,0.2);
+            border-radius: 4px;
+            padding: 0 2px;
+        }
+
+        @media (max-width:768px) {
+            .hero h1 { font-size:2.2rem; }
+            .section-title { font-size:2rem; }
+            .whatsapp-float { width:50px; height:50px; font-size:1.5rem; bottom:20px; right:20px; }
+            .game-card .cover { height:160px; }
+        }
+        @media (max-width:576px) {
+            .hero h1 { font-size:1.8rem; }
+            .btn-primary-custom, .btn-outline-custom { padding:10px 20px; font-size:0.9rem; width:100%; text-align:center; }
+            .search-wrapper input { font-size:0.9rem; padding:10px 16px 10px 44px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- BOTÓN WHATSAPP FLOTANTE -->
+<a href="https://wa.me/5356220351" class="whatsapp-float" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- ===== HERO ===== -->
+<section class="hero" id="inicio">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8" data-aos="fade-right">
+                <h1>🎮 Catálogo de Juegos</h1>
+                <p class="hero-subtitle">
+                    Todos los títulos disponibles · Precios por tamaño · Llenado de memoria
+                </p>
+                <div class="d-flex flex-wrap gap-3 mt-3">
+                    <a href="#catalogo" class="btn btn-primary-custom">
+                        <i class="fas fa-gamepad me-2"></i> Ver Catálogo
+                    </a>
+                    <a href="https://wa.me/5356220351" class="btn btn-outline-custom" target="_blank">
+                        <i class="fab fa-whatsapp me-2"></i> Pedir por WhatsApp
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block text-center" data-aos="fade-left">
+                <i class="fas fa-gamepad" style="font-size:8rem; color:rgba(10,107,255,0.12);"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CATÁLOGO ===== -->
+<section id="catalogo" style="background:#0d0d15; padding:60px 0;">
+    <div class="container">
+
+        <div class="text-center mb-4" data-aos="fade-up">
+            <h2 class="section-title">Nuestros Juegos</h2>
+            <p class="section-subtitle">Busca tu juego favorito o navega por géneros</p>
+        </div>
+
+        <!-- ===== BUSCADOR CON LUPA ===== -->
+        <div class="search-wrapper" data-aos="fade-up" data-aos-delay="100">
+            <span class="search-icon"><i class="fas fa-search"></i></span>
+            <input type="text" id="searchInput" placeholder="Buscar juego... (ej: Resident, God, Sims)" autocomplete="off">
+            <button class="clear-search" id="clearSearch" aria-label="Limpiar búsqueda">
+                <i class="fas fa-times-circle"></i>
+            </button>
+        </div>
+
+        <!-- filtros -->
+        <div class="d-flex flex-wrap justify-content-center mb-4" data-aos="fade-up" data-aos-delay="150">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="accion">Acción</button>
+            <button class="filter-btn" data-filter="aventura">Aventura</button>
+            <button class="filter-btn" data-filter="shooter">Shooter</button>
+            <button class="filter-btn" data-filter="rpg">RPG</button>
+            <button class="filter-btn" data-filter="terror">Terror</button>
+            <button class="filter-btn" data-filter="supervivencia">Supervivencia</button>
+            <button class="filter-btn" data-filter="estrategia">Estrategia</button>
+            <button class="filter-btn" data-filter="deportes">Deportes</button>
+            <button class="filter-btn" data-filter="simulacion">Simulación</button>
+            <button class="filter-btn" data-filter="indie">Indie</button>
+        </div>
+
+        <!-- grid de juegos -->
+        <div class="row g-4" id="gameGrid">
+            <!-- ========================================================== -->
+            <!-- 🎮 COPIA Y PEGA ESTE BLOQUE PARA AGREGAR UN NUEVO JUEGO      -->
+            <!-- ========================================================== -->
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="aventura">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_TTwyFGzq2PKzLg67XATOByd-cN_STQN-8Wl7xm7CwQ&s=10" alt="Assassins Creed Origins" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Assassins Creed Origins Gold Edition</h4>
+                        <span class="game-size">📦 48GB</span>
+                        <p class="game-desc">Aventura · RPG</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Assassins%20Creed%20Origins" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="shooter">
+                <div class="game-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Left4Dead2.jpg/250px-Left4Dead2.jpg" alt="Left 4 Dead 2" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Left 4 Dead 2</h4>
+                        <span class="game-size">📦 14GB</span>
+                        <p class="game-desc">Shooter · Terror</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Left%204%20Dead%202" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSL1o1IqELZwec1Wqk-tIUtN8xnyzJxYwHM75sjo3R7Ng&s=10" alt="Lethal Company" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Lethal Company</h4>
+                        <span class="game-size">📦 400Mb</span>
+                        <p class="game-desc">Terror · Cooperativo</p>
+                        <div class="game-price">$20</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Lethal%20Company" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="rpg">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8G0k9zrSEDYVbROIyntCTI1ZRpcsvpSFOxy_eBoepHg&s" alt="Lies Of P" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Lies Of P Deluxe Edition</h4>
+                        <span class="game-size">📦 26GB</span>
+                        <p class="game-desc">RPG · Acción</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Lies%20Of%20P" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="shooter">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqoEdgBhtM1JZ1Y9yeWs5IiQ5UvULqCrFNJ5nuHmJI_g&s=10" alt="Sniper Ghost Warrior" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Sniper Ghost Warrior Contracts 2</h4>
+                        <span class="game-size">📦 10GB</span>
+                        <p class="game-desc">Shooter · Sigilo</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Sniper%20Ghost%20Warrior" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="shooter">
+                <div class="game-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/3/31/BOCW_Cover_Art.jpg" alt="Call of Duty Black Ops Cold War" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Call of Duty Black Ops Cold War</h4>
+                        <span class="game-size">📦 122GB</span>
+                        <p class="game-desc">Shooter · Acción</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Call%20of%20Duty%20Cold%20War" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuQkAvawjrTQb7RTBUTudTrHOLFsmd71Jsx0QF8mizJQ&s" alt="Little Nightmares" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Little Nightmares</h4>
+                        <span class="game-size">📦 3GB</span>
+                        <p class="game-desc">Terror · Aventura</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Little%20Nightmares" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOpVlMpxeb15jXR5UnNyo5o4buRxqsDRVut6z8veYF9J7IWBtpY-rBRV8&s=10" alt="Little Nightmares 2" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Little Nightmares 2 Enhanced Edition</h4>
+                        <span class="game-size">📦 5GB</span>
+                        <p class="game-desc">Terror · Aventura</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Little%20Nightmares%202" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================================================== -->
+            <!-- 📌 COPIA ESTE BLOQUE DESDE AQUÍ (desde el div.col-lg-3)      -->
+            <!-- ========================================================== -->
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjb_THDZJzFfZ-CG8KcKqJVkLQTvga6XX7jgbeXPJN9w&s=10" alt="Madison" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Madison</h4>
+                        <span class="game-size">📦 4GB</span>
+                        <p class="game-desc">Terror · Psicólogico</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Madison" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="rpg">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThkj2etKbOd8cCIVTUDvA1p_bg-BKLNvgJnlmP-_EKkw&s=10" alt="Clair Obscure Expedition 33" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Clair Obscure Expedition 33</h4>
+                        <span class="game-size">📦 40GB</span>
+                        <p class="game-desc">RPG · GOTY 2025</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Clair%20Obscure" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="rpg">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-KJfhXvkLvAdQx4EAo1x7sfkFtG6rXsANfiCmLbR_kg&s=10" alt="Monster Hunter World Iceborne" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Monster Hunter World Iceborne</h4>
+                        <span class="game-size">📦 93GB</span>
+                        <p class="game-desc">RPG · Acción</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Monster%20Hunter%20World" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="rpg">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpvr669UIPy8Vx4W7wL2cVf3YeF7BuuBZ_Mm18DdG67g&s=1012" alt="Monster Hunter Rise" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Monster Hunter Rise</h4>
+                        <span class="game-size">📦 33GB</span>
+                        <p class="game-desc">RPG · Acción</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Monster%20Hunter%20Rise" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQZDvRscLJFbzCEQFVQ4QzErFgm4LpIb0pNXiehHSAvdA&s=10" alt="Mount & Blade 2 Bannerlord" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Mount & Blade 2 Bannerlord</h4>
+                        <span class="game-size">📦 31GB</span>
+                        <p class="game-desc">Estrategia · RPG</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Mount%20and%20Blade" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="aventura">
+                <div class="game-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/c/c9/Murdered_Soul_Suspect_Artwork_Logo.jpg" alt="Murdered Soul Suspect" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Murdered Soul Suspect</h4>
+                        <span class="game-size">📦 8GB</span>
+                        <p class="game-desc">Aventura · Misterio</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Murdered%20Soul%20Suspect" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrc7DQwAkBkLUpmdf_QsGdIWSqyEaJGxjiC0Yqrbcm5ZojpwoCWUEOCVc&s=10" alt="Reanimal" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Reanimal</h4>
+                        <span class="game-size">📦 12GB</span>
+                        <p class="game-desc">Terror · Supervivencia</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Reanimal" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="shooter">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpv0vwvAxse8cem26bYEGOg_YXVyVuy1P9iD_zNdSGjw&s" alt="Halo Infinite" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Halo Infinite</h4>
+                        <span class="game-size">📦 45GB</span>
+                        <p class="game-desc">Shooter · Acción</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Halo%20Infinite" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="accion">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpV3MwBIefSZpWqZjq9-eCittwajkWkiDyQ2TOj29XqA&s=10" alt="Hitman 3" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Hitman 3</h4>
+                        <span class="game-size">📦 54GB</span>
+                        <p class="game-desc">Acción · Sigilo</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Hitman%203" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDfhWteAxUXKCUqGzsjfkVrdir6c8OQ5xN9J0Y3aStmitd1FxjBOtdHHOu&s=10" alt="Resident Evil 4 Remake" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Resident Evil 4 Remake Deluxe</h4>
+                        <span class="game-size">📦 51GB</span>
+                        <p class="game-desc">Terror · Acción</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20RE4%20Remake" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWVUiPIVTw2lsVSn5dTS8wVhukIWAgnwxb5wYBLCc3VQ&s=10" alt="Resident Evil 7" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Resident Evil 7 Gold Edition</h4>
+                        <span class="game-size">📦 35GB</span>
+                        <p class="game-desc">Terror · Supervivencia</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20RE7" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjLjSV59N324nePIXprMS-sM-DnLk58-swuoCDyzu5Xw&s" alt="Resident Evil Village" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Resident Evil Village Deluxe</h4>
+                        <span class="game-size">📦 24GB</span>
+                        <p class="game-desc">Terror · Acción</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20RE%20Village" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="deportes">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZUl2exGbp5HPiLUH8dVW4HHTX8HKx-eolQXKmcbUxfA&s=10" alt="Rocket League" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Rocket League</h4>
+                        <span class="game-size">📦 6GB</span>
+                        <p class="game-desc">Deportes · Coches</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Rocket%20League" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="accion">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROK0d2PfraYCSgZZ4gsjR_VElOaULWw14DQA&s" alt="God Of War" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>God Of War (GOTY 2018)</h4>
+                        <span class="game-size">📦 40GB</span>
+                        <p class="game-desc">Acción · Aventura</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20God%20of%20War" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="accion">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEmHlaYwsOI5Bdtt7HY5TzBP4RCBLsB9sN2w&s" alt="God Of War Ragnarok" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>God Of War Ragnarok</h4>
+                        <span class="game-size">📦 80GB</span>
+                        <p class="game-desc">Acción · Aventura</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20God%20of%20War%20Ragnarok" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnOuDIJDLXRMffZZlOvTlA03-uKkH8PXXRY_iQWVm9hxzsFW5Zz4zXDhA&s=10" alt="Outlast" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Outlast</h4>
+                        <span class="game-size">📦 5GB</span>
+                        <p class="game-desc">Terror · Supervivencia</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Outlast" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="simulacion">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdmd-riaTsOWixT4qc5qVlCbbyc7lMo42iQrGn8KgDiA&s=10" alt="IT Specialist Simulator" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>IT Specialist Simulator</h4>
+                        <span class="game-size">📦 300Mb</span>
+                        <p class="game-desc">Simulación · Gestión</p>
+                        <div class="game-price">$20</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20IT%20Specialist" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="aventura">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUsHGDjfLfci-2U7BxEMvj6LQdkSoSugDKMeLrLFoX1w&s" alt="Beyond Two Souls" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Beyond Two Souls</h4>
+                        <span class="game-size">📦 21GB</span>
+                        <p class="game-desc">Aventura · Drama</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Beyond%20Two%20Souls" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="terror">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqBDdfERHydpaquuPKamZ3l6PjlAvoKYPLVmaoS5w5jg&s" alt="Callisto Protocol" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Callisto Protocol</h4>
+                        <span class="game-size">📦 74GB</span>
+                        <p class="game-desc">Terror · Ciencia Ficción</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Calisto%20Protocol" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="aventura">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4AYau55Ao46-ozeQ7U2sqRyxDN1w8rJytdg&s" alt="Tomb Raider" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Tomb Raider (GOTY 2013)</h4>
+                        <span class="game-size">📦 12GB</span>
+                        <p class="game-desc">Aventura · Acción</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Tomb%20Raider" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="aventura">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQKtGMQ5QdOQgTIkFb2Zbh0Kvc33MEbN4Id5g&s" alt="Rise Of Tomb Raider" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Rise Of Tomb Raider</h4>
+                        <span class="game-size">📦 25GB</span>
+                        <p class="game-desc">Aventura · Acción</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Rise%20of%20Tomb%20Raider" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="rpg">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2sRN8T4eFbr28Px146LJg_sZxWjBa-0K-Z2m53vAA6A&s=10" alt="Elden Ring" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Elden Ring Deluxe Edition</h4>
+                        <span class="game-size">📦 62GB</span>
+                        <p class="game-desc">RPG · Acción</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Elden%20Ring" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="rpg">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbqCwMVZ_-xBGUe6ZE8_8AfPVMorxgRN5-rTgR6uUF0A&s=10" alt="Forspoken" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Forspoken</h4>
+                        <span class="game-size">📦 90GB</span>
+                        <p class="game-desc">RPG · Acción</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Forspoken" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="simulacion">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQrl6qPB-jO6SnA9-v43qSA6RXNMaQanX7hP2EgJ8rjQ&s" alt="Slime Rancher" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Slime Rancher</h4>
+                        <span class="game-size">📦 800Mb</span>
+                        <p class="game-desc">Simulación · Aventura</p>
+                        <div class="game-price">$20</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Slime%20Rancher" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="simulacion">
+                <div class="game-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/b/b5/Slime_Rancher_2.jpg/250px-Slime_Rancher_2.jpg" alt="Slime Rancher 2" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Slime Rancher 2</h4>
+                        <span class="game-size">📦 2GB</span>
+                        <p class="game-desc">Simulación · Aventura</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Slime%20Rancher%202" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="indie">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1lKI_bcUYwpvXVpe_SpOJp7_qrvCGgzpNfQ&s" alt="Hollow Knight" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Hollow Knight</h4>
+                        <span class="game-size">📦 2GB</span>
+                        <p class="game-desc">Indie · Metroidvania</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Hollow%20Knight" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="indie">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcShYgZWXB-rdYoX6xZxbt2sklkIDs4QMgE9fw&s" alt="Hollow Knight Silksong" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Hollow Knight Silksong</h4>
+                        <span class="game-size">📦 2GB</span>
+                        <p class="game-desc">Indie · Metroidvania</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Hollow%20Knight%20Silksong" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="shooter">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQX526xA98iKiCDAaMA3V7P_x7lDdYyQC-VQtdOKN75dQ&s" alt="Spec Ops The Line" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Spec Ops The Line</h4>
+                        <span class="game-size">📦 7GB</span>
+                        <p class="game-desc">Shooter · Acción</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Spec%20Ops" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="aventura">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDqyoS86f8IK4RknOBhP4pEto1Za6UoBcwZ8TAXmvMSA&s" alt="Horizon Forbidden West" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Horizon Forbidden West</h4>
+                        <span class="game-size">📦 99GB</span>
+                        <p class="game-desc">Aventura · RPG</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Horizon%20Forbidden%20West" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="supervivencia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRx4TkMIFXg0KuzQbcFKY57zWxel62Hnofm-LRLfPCiNw&s=10" alt="Subnautica" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Subnautica</h4>
+                        <span class="game-size">📦 3GB</span>
+                        <p class="game-desc">Supervivencia · Aventura</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Subnautica" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="indie">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT7m-0bbHKURxi_DO-x3G25qFlJ8gwnBJftwQ&s" alt="Terraria" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Terraria</h4>
+                        <span class="game-size">📦 700Mb</span>
+                        <p class="game-desc">Indie · Aventura</p>
+                        <div class="game-price">$20</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Terraria" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="rpg">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQk_GG72FQiS-jr7Hao6CGuMG7WiobWWjqD0wt5WZdbVw&s=10" alt="Last Epoch" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Last Epoch</h4>
+                        <span class="game-size">📦 15GB</span>
+                        <p class="game-desc">RPG · Acción</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Las%20Epoch" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="supervivencia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTRtxjHgfhIASP_RlLaa-s7cHe2nrxfT0iTXFO3XZ-joA&s=10" alt="The Forest" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>The Forest</h4>
+                        <span class="game-size">📦 2GB</span>
+                        <p class="game-desc">Supervivencia · Terror</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20The%20Forest" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="aventura">
+                <div class="game-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/8/86/The_Last_of_Us_Part_I_cover.jpg" alt="The Last Of Us" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>The Last Of Us Remake</h4>
+                        <span class="game-size">📦 70GB</span>
+                        <p class="game-desc">Aventura · Supervivencia</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20The%20Last%20of%20Us" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdUJLhHscJFev0fbDg-Nvca2y_8d5BSy4vppXeQ9NLSCs67uX9dJhmf-Y&s=10" alt="The Last Of Us 2 Remastered" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>The Last Of Us 2 Remastered</h4>
+                        <span class="game-size">📦 80Gb</span>
+                        <p class="game-desc">Accion · Aventura</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20The%20Last%20of%20Us%202" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/f/fd/The_Riftbreaker_cover_art.jpg" alt="The Rift Breaker" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>The Rift Breaker</h4>
+                        <span class="game-size">📦 10GB</span>
+                        <p class="game-desc">Estrategia · Tower Defense</p>
+                        <div class="game-price">$70</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20The%20Rift%20Breaker" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="simulacion">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7xpZ56FnuL2GuIhkBiwTbw4Vv_I9mDIlCP8-8uZ0lfA&s" alt="The Sims 4" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>The Sims 4</h4>
+                        <span class="game-size">📦 36GB</span>
+                        <p class="game-desc">Simulación · Vida</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20The%20Sims%204" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="accion">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSOPSsjCpFvfcmaL3kOGMXQ2wQwsEzwA_GfXPGkL-4guEIv3e-dV3MCQXHK&s=10" alt="Middle Earth Shadows Of Mordor" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Middle Earth Shadows Of Mordor</h4>
+                        <span class="game-size">📦 53GB</span>
+                        <p class="game-desc">Acción · Aventura</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Shadow%20of%20Mordor" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="indie">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0LdlQLWGY4xyk-hU42enP-72iVbf4WZgvyQ&s" alt="Balatro" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Balatro</h4>
+                        <span class="game-size">📦 56Mb</span>
+                        <p class="game-desc">Indie · Estrategia</p>
+                        <div class="game-price">$20</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Balatro" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQW0bkFFdy4hR8E9NLwGXJn5wS9YeNBHUY7tGBVdQ3xQ&s=10" alt="Age Of Empires 2" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Age Of Empires 2</h4>
+                        <span class="game-size">📦 700Mb</span>
+                        <p class="game-desc">Estrategia · Histórico</p>
+                        <div class="game-price">$20</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Age%20of%20Empires%202" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQMuUWh8lXSd7a6sxE--BNshTvp9ylVgDKcJ4mDlUYnzA&s" alt="Uncharted 4" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Uncharted</h4>
+                        <span class="game-size">📦 68Gb</span>
+                        <p class="game-desc">Aventura · Accion</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Uncharted" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://www.hogwartslegacy.com/images/share.jpg" alt="Hogwarts Legacy" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Hogwarts Legacy</h4>
+                        <span class="game-size">📦 85Gb</span>
+                        <p class="game-desc">Accion · Aventura</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Hogwarts%20Legacy" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYFubt4oQl0NMUKw7Za62L8RXJha_ONg2gTGYianAbSg&s=10" alt="Until Dawn" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Until Dawn</h4>
+                        <span class="game-size">📦 59Gb</span>
+                        <p class="game-desc">Terror · Suspenso</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Until%20Dawn" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSlKWElJv4a9CtB6b37vWEjDmE6LBczZjQ2RVqHLQVP5A&s=10" alt="007 First Light" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>007 First Light</h4>
+                        <span class="game-size">📦 49Gb</span>
+                        <p class="game-desc">Aventura · Accion</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20007%20First%20Light" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkF_X5EyGG4J2rY4ZMHgdiVI9PmfbXYArN1s3sCkV12A&s=10" alt="The Dark Pictures Antohology: The Devil in Me" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>The Dark Pictures Antohology: The Devil in Me</h4>
+                        <span class="game-size">📦 ~Gb</span>
+                        <p class="game-desc">Terror · Suspenso</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20The%20Devil%20in%20Me" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/86/House_of_Ashes_cover_art.png/250px-House_of_Ashes_cover_art.png" alt="The Dark Pictures Antohology: House Of Ashes" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>The Dark Pictures Antohology: House Of Ashes</h4>
+                        <span class="game-size">📦 ~Gb</span>
+                        <p class="game-desc">Terror · Suspenso</p>
+                        <div class="game-price">$125</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20House%20of%20Ashes" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 game-item" data-genre="estrategia">
+                <div class="game-card">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYP_CehFr3e8r2RiGpuZXGe_xIITprV-aS3N3I_P326g&s" alt="Cyberpunk 2077" class="cover" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="cover-placeholder" style="display:none;"><i class="fas fa-gamepad"></i></div>
+                    <div class="card-body">
+                        <h4>Cyberpunk 2077</h4>
+                        <span class="game-size">📦 ~Gb</span>
+                        <p class="game-desc">Accion · Aventura</p>
+                        <div class="game-price">$200</div>
+                        <a href="https://wa.me/5356220351?text=Quiero%20Cyberpunk%202077" class="btn-sm-custom" target="_blank">
+                            <i class="fab fa-whatsapp me-1"></i> Pedir
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            
+
+
+            <!-- ========================================================== -->
+            <!-- 📌 FIN DEL BLOQUE PARA COPIAR                                -->
+            <!-- ========================================================== -->
+
+        </div><!-- /row -->
+
+        <!-- mensaje no resultados -->
+        <div id="noResults" class="text-center py-5" style="display:none;">
+            <i class="fas fa-search" style="font-size:3rem; color:#a0b4d0;"></i>
+            <p class="mt-3 text-secondary">No encontramos juegos con ese nombre.<br>¡Tenemos muchos más! Escríbenos y te asesoramos.</p>
+            <a href="https://wa.me/5356220351" class="btn btn-primary-custom" target="_blank">
+                <i class="fab fa-whatsapp me-2"></i> Consultar por WhatsApp
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<!-- ===== POR QUÉ ELEGIRNOS ===== -->
+<section style="background:#0a0a0f; padding:60px 0;">
+    <div class="container">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="section-title">¿Por qué comprar con nosotros?</h2>
+            <p class="section-subtitle">Juegos listos para jugar en tu PC</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3 col-6" data-aos="zoom-in">
+                <div class="text-center">
+                    <i class="fas fa-download" style="font-size:3rem; color:var(--primary-blue);"></i>
+                    <h6 class="mt-2 text-white">Instalación rápida</h6>
+                    <p class="text-secondary small">Lleva tu memoria y te lo dejamos listo</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="100">
+                <div class="text-center">
+                    <i class="fas fa-shield-alt" style="font-size:3rem; color:var(--primary-blue);"></i>
+                    <h6 class="mt-2 text-white">Sin virus</h6>
+                    <p class="text-secondary small">Todo escaneado y probado</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="200">
+                <div class="text-center">
+                    <i class="fas fa-tags" style="font-size:3rem; color:var(--primary-blue);"></i>
+                    <h6 class="mt-2 text-white">Precios justos</h6>
+                    <p class="text-secondary small">Por tamaño, no por juego</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6" data-aos="zoom-in" data-aos-delay="300">
+                <div class="text-center">
+                    <i class="fas fa-headset" style="font-size:3rem; color:var(--primary-blue);"></i>
+                    <h6 class="mt-2 text-white">Soporte</h6>
+                    <p class="text-secondary small">Te ayudamos con la instalación</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container text-center">
+        <h4 class="text-white fw-bold">PROYECTTEC · Juegos</h4>
+        <p class="text-secondary">Catálogo de juegos para PC</p>
+        <div class="footer-contact d-flex justify-content-center gap-3 flex-wrap">
+            <a href="https://wa.me/5356220351" class="footer-contact-item" target="_blank">
+                <i class="fab fa-whatsapp"></i> +53 56220351
+            </a>
+            <span class="footer-contact-item">
+                <i class="fas fa-map-marker-alt"></i> Edificio 8, Apt 17, Ortiz, Ciego de Ávila
+            </span>
+        </div>
+        <div class="d-flex justify-content-center gap-4 mt-3">
+            <a href="https://wa.me/5356220351" class="text-white" target="_blank"><i class="fab fa-whatsapp fa-2x"></i></a>
+            <a href="#" class="text-white"><i class="fab fa-facebook fa-2x"></i></a>
+            <a href="#" class="text-white"><i class="fab fa-instagram fa-2x"></i></a>
+        </div>
+        <p class="text-secondary small mt-3">© 2026 ProyectTec · Todos los derechos reservados</p>
+        <p class="text-secondary small">
+            <a href="index.html" class="text-secondary" style="text-decoration:none;">
+                <i class="fas fa-arrow-left me-1"></i> Volver al inicio
+            </a>
+        </p>
+    </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 800, once: true, offset: 80 });
+
+    // ============================================================
+    // FILTROS + BUSCADOR (con lupa)
+    // ============================================================
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const gameItems = document.querySelectorAll('.game-item');
+    const noResults = document.getElementById('noResults');
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearSearch');
+
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    // Función principal de filtrado
+    function filterGames() {
+        const searchTerm = currentSearch.toLowerCase().trim();
+        let visibleCount = 0;
+
+        gameItems.forEach(item => {
+            const genre = item.dataset.genre;
+            const title = item.querySelector('h4')?.textContent?.toLowerCase() || '';
+            const desc = item.querySelector('.game-desc')?.textContent?.toLowerCase() || '';
+
+            const matchesGenre = currentFilter === 'all' || genre === currentFilter;
+            const matchesSearch = searchTerm === '' || title.includes(searchTerm) || desc.includes(searchTerm);
+
+            if (matchesGenre && matchesSearch) {
+                item.style.display = 'block';
+                visibleCount++;
+                // Resaltar coincidencia en el título
+                const titleEl = item.querySelector('h4');
+                if (titleEl && searchTerm !== '') {
+                    const originalText = titleEl.textContent;
+                    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                    titleEl.innerHTML = originalText.replace(regex, '<span class="highlight-match">$1</span>');
+                } else {
+                    // Restaurar texto original si no hay búsqueda
+                    const titleEl = item.querySelector('h4');
+                    if (titleEl) {
+                        const originalText = titleEl.textContent;
+                        // Quitar spans de resaltado
+                        titleEl.innerHTML = originalText.replace(/<span class="highlight-match">(.*?)<\/span>/g, '$1');
+                    }
+                }
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // Mostrar/ocultar mensaje de no resultados
+        if (visibleCount === 0) {
+            noResults.style.display = 'block';
+        } else {
+            noResults.style.display = 'none';
+        }
+    }
+
+    // --- FILTROS ---
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            filterGames();
+        });
+    });
+
+    // --- BUSCADOR (con lupa) ---
+    searchInput.addEventListener('input', function() {
+        currentSearch = this.value;
+        // Mostrar/ocultar botón de limpiar
+        if (currentSearch.length > 0) {
+            clearBtn.classList.add('visible');
+        } else {
+            clearBtn.classList.remove('visible');
+        }
+        filterGames();
+    });
+
+    // Limpiar búsqueda
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        currentSearch = '';
+        this.classList.remove('visible');
+        filterGames();
+        searchInput.focus();
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
+</body>
+</html>
