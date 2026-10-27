@@ -618,48 +618,6 @@
     .marquee-item:hover { color: var(--accent-cyan); }
     .marquee-item i { color: var(--primary-blue); font-size: 1.5rem; }
 
-    /* Catálogo */
-    .catalog-panel {
-      background: linear-gradient(135deg, var(--card-bg), var(--card-bg-alt));
-      border: 1px solid var(--border-soft);
-      border-radius: var(--radius-xl);
-      padding: 3rem 2.5rem;
-      position: relative; overflow: hidden;
-    }
-    .catalog-panel::before {
-      content: '';
-      position: absolute; top: -100px; right: -100px;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(10,107,255,.2), transparent);
-      border-radius: 50%;
-      filter: blur(60px);
-      pointer-events: none;
-    }
-    .catalog-icons { display: inline-flex; gap: 15px; margin-bottom: 1rem; }
-    .catalog-icon {
-      width: 70px; height: 70px;
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      animation: iconBounce 3s ease-in-out infinite;
-    }
-    .catalog-icon-1 {
-      background: linear-gradient(135deg, rgba(10,107,255,.2), rgba(0,212,255,.1));
-      border: 1px solid rgba(10,107,255,.3);
-    }
-    .catalog-icon-1 i { font-size: 2rem; color: var(--accent-cyan); }
-    .catalog-icon-2 {
-      background: linear-gradient(135deg, rgba(123,47,247,.2), rgba(10,107,255,.1));
-      border: 1px solid rgba(123,47,247,.3);
-      animation-direction: reverse;
-    }
-    .catalog-icon-2 i { font-size: 2rem; color: var(--accent-purple); }
-    @keyframes iconBounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    .catalog-title { font-size: 1.8rem; font-weight: 800; color: #fff; margin-bottom: .5rem; }
-    .catalog-subtitle { color: var(--text-muted); margin-bottom: 0; }
-
     /* Tabs precios */
     .pricing-tabs {
       display: flex; justify-content: center; flex-wrap: wrap;
@@ -1201,7 +1159,6 @@
       .bento-large, .bento-wide, .bento-tall, .bento-small, .bento-medium { grid-column: span 1; }
       .gallery-tile.tile-horizontal { height: 250px; }
       .gallery-tile.tile-vertical { height: 400px; }
-      .catalog-panel { padding: 2rem 1.5rem; }
       .cta-box { padding: 3rem 1.5rem; }
     }
 
@@ -1234,7 +1191,6 @@
     <nav class="floating-nav" aria-label="Navegación principal">
       <a href="#inicio" data-nav>Inicio</a>
       <a href="#servicios" data-nav>Servicios</a>
-      <a href="#catalogo" data-nav>Catálogo</a>
       <a href="#precios" data-nav>Precios</a>
       <a href="#galeria" data-nav>Galería</a>
       <a href="#faq" data-nav>FAQ</a>
@@ -1401,7 +1357,7 @@
             <div>
               <div class="bento-icon-wrap"><i class="fas fa-usb" aria-hidden="true"></i></div>
               <h3 class="bento-title">💾 Llenado de Memoria</h3>
-              <p class="bento-desc">Series, novelas, animes, juegos por tamaño o capacidad. Contenido actualizado constantemente.</p>
+              <p class="bento-desc">Series, novelas y animes. Contenido actualizado constantemente.</p>
             </div>
             <a href="#precios" class="btn btn-outline-custom mt-3" style="align-self:flex-start;font-size:.85rem;padding:10px 22px;">
               Ver Precios <i class="fas fa-arrow-right" aria-hidden="true"></i>
@@ -1425,66 +1381,6 @@
               <p class="bento-desc">Colores vibrantes.</p>
             </div>
           </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- CATÁLOGO -->
-    <section id="catalogo" class="section-alt" aria-labelledby="catalogo-title">
-      <div class="container">
-        <div class="section-header" data-aos="fade-up">
-          <div class="section-tag">Explora</div>
-          <h2 class="section-title" id="catalogo-title">Catálogo de Juegos</h2>
-          <p class="section-subtitle">Juegos disponibles para llenado de memoria</p>
-        </div>
-
-        <div class="row justify-content-center">
-          <div class="col-lg-10" data-aos="zoom-in">
-            <div class="catalog-panel">
-              <div class="row align-items-center mb-4">
-                <div class="col-md-7 text-center text-md-start mb-3 mb-md-0">
-                  <div class="catalog-icons">
-                    <div class="catalog-icon catalog-icon-1"><i class="fas fa-gamepad" aria-hidden="true"></i></div>
-                    <div class="catalog-icon catalog-icon-2"><i class="fas fa-dice-d20" aria-hidden="true"></i></div>
-                  </div>
-                  <h3 class="catalog-title">Muchos juegos disponibles</h3>
-                  <p class="catalog-subtitle">Desde clásicos hasta los últimos lanzamientos, con precios económicos</p>
-                </div>
-                <div class="col-md-5 text-center text-md-end">
-                  <a href="https://wa.me/5358220655?text=Quiero%20informaci%C3%B3n%20sobre%20el%20cat%C3%A1logo%20de%20juegos" class="btn btn-primary-custom" target="_blank" rel="noopener">
-                    <i class="fab fa-whatsapp" aria-hidden="true"></i> Consultar por WhatsApp
-                  </a>
-                </div>
-              </div>
-
-              <div class="row g-3 mt-3">
-                <div class="col-md-6 col-lg-3">
-                  <div class="stat-badge">
-                    <i class="fas fa-th-large" aria-hidden="true"></i>
-                    <div class="info"><div class="title">Variedad</div><div class="lbl">Muchos títulos</div></div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                  <div class="stat-badge">
-                    <i class="fas fa-tags" aria-hidden="true"></i>
-                    <div class="info"><div class="title">Categorías</div><div class="lbl">Acción, deportes y más</div></div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                  <div class="stat-badge">
-                    <i class="fas fa-sync-alt" aria-hidden="true"></i>
-                    <div class="info"><div class="title">Actualizado</div><div class="lbl">Contenido reciente</div></div>
-                  </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                  <div class="stat-badge">
-                    <i class="fas fa-star" aria-hidden="true"></i>
-                    <div class="info"><div class="title">Calidad</div><div class="lbl">Trabajo garantizado</div></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -1619,8 +1515,8 @@
 
         <!-- Memoria -->
         <div class="tab-content-panel" id="tab-memoria" role="tabpanel" aria-labelledby="btn-tab-memoria" tabindex="0">
-          <div class="row g-4">
-            <div class="col-lg-4" data-aos="fade-up">
+          <div class="row g-4 justify-content-center">
+            <div class="col-lg-6" data-aos="fade-right">
               <div class="price-card">
                 <div class="price-card-title"><i class="fas fa-hdd" aria-hidden="true"></i> Grabado por Capacidad</div>
                 <div class="price-row"><span class="label">2GB</span><span class="value">$10</span></div>
@@ -1631,16 +1527,7 @@
                 <div class="price-row"><span class="label">64GB</span><span class="value">$100</span></div>
               </div>
             </div>
-            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
-              <div class="price-card">
-                <div class="price-card-title"><i class="fas fa-gamepad" aria-hidden="true"></i> Juegos por Tamaño</div>
-                <div class="price-row"><span class="label">Hasta 1GB</span><span class="value">$20</span></div>
-                <div class="price-row"><span class="label">1GB - 10GB</span><span class="value">$70</span></div>
-                <div class="price-row"><span class="label">10GB - 50GB</span><span class="value">$125</span></div>
-                <div class="price-row"><span class="label">Más de 50GB</span><span class="value gold">$200</span></div>
-              </div>
-            </div>
-            <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200">
+            <div class="col-lg-6" data-aos="fade-left" data-aos-delay="100">
               <div class="price-card">
                 <div class="price-card-title"><i class="fas fa-tv" aria-hidden="true"></i> Contenido por Capítulos</div>
                 <div class="price-row"><span class="label">Novelas (por capítulo)</span><span class="value">$2</span></div>
