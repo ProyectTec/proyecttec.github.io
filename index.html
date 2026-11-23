@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#05060b">
   <meta name="color-scheme" content="dark">
   <script>document.documentElement.classList.add('js')</script>
@@ -1304,6 +1304,162 @@
       }
       .marquee, .hero-blob, .floating-badge, .hero-visual-card, .hero-core, .orbit,
       .scene-object, .scene-shadow, .scene-svg * { animation: none !important; }
+    }
+
+    /* ============================================================
+       CORRECCIONES RESPONSIVE PARA MÓVIL
+       (van al final para sobrescribir las reglas anteriores)
+       ============================================================ */
+    html { -webkit-tap-highlight-color: transparent; }
+    html, body { max-width: 100%; overflow-x: clip; }
+    body.nav-open { overflow: hidden; }
+
+    /* ---------- Tablet y menores ---------- */
+    @media (max-width: 992px) {
+      .hero-blob { filter: blur(60px); }
+      .hero-blob-1 { width: 300px; height: 300px; top: -100px; left: -120px; }
+      .hero-blob-2 { width: 340px; height: 340px; bottom: -140px; right: -140px; }
+      .hero-blob-3 { display: none; }
+
+      /* Las entradas laterales provocan scroll horizontal en móvil: todas suben */
+      .rv-in[data-aos="fade-left"],
+      .rv-in[data-aos="fade-right"] { animation-name: rvUp; }
+
+      .pricing-tabs { scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+      .pricing-tab { scroll-snap-align: center; min-height: 44px; }
+    }
+
+    /* ---------- Móvil ---------- */
+    @media (max-width: 768px) {
+      .container { padding-left: 16px; padding-right: 16px; }
+      section { padding: 64px 0; }
+      .section-header { margin-bottom: 38px; }
+      .section-tag { font-size: .68rem; letter-spacing: .18em; padding: 6px 14px; }
+      .section-title { font-size: clamp(1.7rem, 7.2vw, 2.4rem); }
+      .section-subtitle { font-size: .95rem; }
+
+      .mobile-nav { max-height: 100dvh; overflow-y: auto; }
+
+      /* Hero */
+      .hero { min-height: auto; padding: 96px 0 56px; }
+      .hero h1 { font-size: clamp(2.1rem, 11.2vw, 3.4rem); letter-spacing: -.04em; }
+      .hero-subtitle { font-size: 1rem; margin-bottom: 1.5rem; }
+      .hero-eyebrow { font-size: .74rem; padding: 7px 14px 7px 10px; margin-bottom: 1.25rem; }
+      .feature-chips { gap: 6px; margin-bottom: 1.75rem; }
+      .feature-chip { font-size: .76rem; padding: 7px 12px; }
+
+      .hero-content > .d-flex { flex-direction: column; gap: .75rem !important; }
+      .hero-content > .d-flex .btn { width: 100%; }
+
+      /* Las 3 insignias en una sola fila, compactas */
+      .hero-content .row.mt-5 { margin-top: 2rem !important; --bs-gutter-x: .6rem; --bs-gutter-y: .6rem; }
+      .hero-content .row.mt-5 > [class*="col-"] { flex: 0 0 33.3333%; width: 33.3333%; max-width: 33.3333%; }
+      .stat-badge { flex-direction: column; text-align: center; gap: 8px; padding: 14px 6px; }
+      .stat-badge i { width: 36px; height: 36px; font-size: .95rem; }
+      .stat-badge .title { font-size: .82rem; }
+      .stat-badge .lbl { font-size: .68rem; }
+
+      /* Marquee */
+      .marquee-container { padding: 18px 0; }
+      .marquee { gap: 36px; }
+      .marquee-item { font-size: .95rem; }
+
+      /* Carrusel */
+      .service-card { width: min(78vw, 290px); min-height: 300px; padding: 1.5rem; }
+      .service-icon { width: 50px; height: 50px; border-radius: 14px; }
+      .service-icon i { font-size: 1.2rem; }
+      .service-title { font-size: 1.1rem; }
+      .carousel-viewport { padding: 18px 0 26px; }
+
+      /* Precios */
+      .pricing-stage { padding: 1rem; border-radius: 22px; }
+      .pricing-stage .price-card,
+      .pricing-stage .feature-package { padding: 1.15rem; }
+      .pricing-stage .category-hero-scene { height: 120px; margin: 0 auto .5rem; transform: none; }
+      .category-hero-scene::before { width: 220px; height: 220px; }
+      .scene-svg { width: 150px; }
+      .scene-object { transform: none; }
+      .scene-object .scene-shadow { width: 110px; }
+
+      .price-card-title { font-size: 1rem; margin-bottom: 1rem; padding-bottom: .9rem; }
+      .price-row { padding: 11px 8px; margin: 0 -8px; gap: 10px; }
+      .price-row .label { flex: 1 1 auto; min-width: 0; font-size: .86rem; line-height: 1.35; }
+      .price-row .value { flex-shrink: 0; font-size: .86rem; padding: 4px 11px; }
+      .price-row .value.consult { font-size: .72rem; }
+      .price-note { font-size: .84rem; }
+      .price-example { font-size: .8rem; }
+      .feature-package::after { top: 14px; right: 14px; font-size: .6rem; padding: 4px 10px; }
+      .feature-package-title { font-size: 1rem; padding-right: 78px; }
+      .price-big { font-size: 2.4rem; }
+      .feature-package ul li { font-size: .88rem; }
+
+      .pricing-stage .text-center.mt-5 { text-align: center !important; margin-top: 1.5rem !important; }
+      .pricing-stage .text-center .btn { width: 100%; }
+
+      /* Ventajas */
+      .advantage-row,
+      .advantage-row.reverse { grid-template-columns: 52px 1fr; gap: 14px; padding: 18px 16px; margin-bottom: 12px; }
+      .advantage-icon-box { width: 52px; height: 52px; border-radius: 16px; }
+      .advantage-icon-box i { font-size: 1.15rem; }
+      .advantage-number { font-size: .66rem; letter-spacing: .16em; }
+      .advantage-content h3 { font-size: 1.02rem; }
+      .advantage-content p { font-size: .9rem; }
+
+      /* FAQ */
+      .faq-item { padding: 1.05rem 1.1rem; }
+      .faq-item summary { font-size: .95rem; }
+      .faq-item p { font-size: .9rem; }
+
+      /* CTA */
+      .cta-section { padding: 56px 0; }
+      .cta-box { padding: 3rem 1.25rem; border-radius: 24px; }
+      .cta-subtitle { font-size: .98rem; margin-bottom: 1.75rem; }
+      .cta-box .btn,
+      .btn-lg-custom { width: 100%; padding: 16px 18px; font-size: .98rem; white-space: normal; }
+      .cta-box::after, .pricing-stage::after { animation: none; }
+
+      /* Footer */
+      footer { padding: 56px 0 28px; }
+      .footer-logo { font-size: 1.7rem; }
+      .footer-contact { flex-direction: column; align-items: center; gap: 12px; margin: 1.5rem 0; }
+      .footer-contact-item { justify-content: center; text-align: center; font-size: .86rem; }
+      .social-icons { margin: 1.5rem 0; }
+      .social-icon { width: 44px; height: 44px; font-size: 1.05rem; }
+
+      /* Botones flotantes */
+      .whatsapp-float { width: 54px; height: 54px; font-size: 1.45rem; }
+    }
+
+    /* ---------- Móvil pequeño: se quitan elementos decorativos ---------- */
+    @media (max-width: 576px) {
+      .hero-visual { height: 230px; margin-top: 2rem; }
+      .hero-visual-card,
+      .floating-badge { display: none; }
+      .orbit-1 { width: 150px; height: 150px; }
+      .orbit-2 { width: 215px; height: 215px; }
+      .hero-core { width: 88px; height: 88px; border-radius: 24px; }
+      .hero-core i { font-size: 2rem; }
+      .hero-blob-2 { display: none; }
+    }
+
+    /* ---------- Pantallas muy pequeñas (≤380px) ---------- */
+    @media (max-width: 380px) {
+      .container { padding-left: 14px; padding-right: 14px; }
+      .hero-eyebrow { font-size: .7rem; }
+      .stat-badge .title { font-size: .76rem; }
+      .stat-badge .lbl { font-size: .62rem; }
+      .service-card { width: 80vw; }
+      .pricing-tab { padding: 10px 13px; font-size: .84rem; }
+      .pricing-stage { padding: .8rem; }
+      .pricing-stage .price-card,
+      .pricing-stage .feature-package { padding: 1rem; }
+      .price-row .label { font-size: .82rem; }
+      .price-row .value { font-size: .82rem; padding: 4px 9px; }
+      .price-big { font-size: 2.1rem; }
+      .feature-package-title { padding-right: 70px; }
+      .advantage-row,
+      .advantage-row.reverse { grid-template-columns: 44px 1fr; gap: 12px; padding: 16px 14px; }
+      .advantage-icon-box { width: 44px; height: 44px; border-radius: 14px; }
     }
   </style>
 </head>
